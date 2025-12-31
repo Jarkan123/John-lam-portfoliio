@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useCMS } from '../context/CMSContext';
+import { useCMS } from '../context/CMSContext.tsx';
 
 const CaseStudiesPage: React.FC = () => {
   const { data } = useCMS();

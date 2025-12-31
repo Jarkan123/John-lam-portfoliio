@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useSound } from '../context/SoundContext';
+import { useSound } from '../context/SoundContext.tsx';
 
 interface TypingEffectProps {
   phrases: string[];

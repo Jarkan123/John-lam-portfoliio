@@ -1,6 +1,6 @@
 
 import React, { useRef, useEffect } from 'react';
-import { useCMS } from '../context/CMSContext';
+import { useCMS } from '../context/CMSContext.tsx';
 
 const MatrixBackground: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);

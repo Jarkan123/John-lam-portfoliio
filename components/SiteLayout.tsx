@@ -1,8 +1,8 @@
 
 import React, { ReactNode, useEffect } from 'react';
-import Header from './Header';
-import Footer from './Footer';
-import { useCMS } from '../context/CMSContext';
+import Header from './Header.tsx';
+import Footer from './Footer.tsx';
+import { useCMS } from '../context/CMSContext.tsx';
 
 interface SiteLayoutProps {
   children: ReactNode;

@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
 import { NavLink as RouterNavLink } from 'react-router-dom';
-import { useCMS } from '../context/CMSContext';
-import { useSound } from '../context/SoundContext';
+import { useCMS } from '../context/CMSContext.tsx';
+import { useSound } from '../context/SoundContext.tsx';
 
 const Header: React.FC = () => {
   const { data } = useCMS();

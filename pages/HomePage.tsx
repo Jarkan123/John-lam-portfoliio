@@ -1,13 +1,13 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useCMS } from '../context/CMSContext';
-import { useSound } from '../context/SoundContext';
-import TypingEffect from '../components/TypingEffect';
-import LogoSlider from '../components/LogoSlider';
-import TestimonialSlider from '../components/TestimonialSlider';
-import Kickstart from '../components/Kickstart';
-import MatrixBackground from '../components/MatrixBackground';
+import { useCMS } from '../context/CMSContext.tsx';
+import { useSound } from '../context/SoundContext.tsx';
+import TypingEffect from '../components/TypingEffect.tsx';
+import LogoSlider from '../components/LogoSlider.tsx';
+import TestimonialSlider from '../components/TestimonialSlider.tsx';
+import Kickstart from '../components/Kickstart.tsx';
+import MatrixBackground from '../components/MatrixBackground.tsx';
 
 const HomePage: React.FC = () => {
   const { data } = useCMS();

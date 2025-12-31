@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { useCMS } from '../context/CMSContext';
-import { useSound } from '../context/SoundContext';
+import { useCMS } from '../context/CMSContext.tsx';
+import { useSound } from '../context/SoundContext.tsx';
 
 const TestimonialSlider: React.FC = () => {
   const { data } = useCMS();

@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { BrandLogo } from '../types';
-import { useCMS } from '../context/CMSContext';
+import { BrandLogo } from '../types.ts';
+import { useCMS } from '../context/CMSContext.tsx';
 
 const LogoSlider: React.FC = () => {
     const { data } = useCMS();

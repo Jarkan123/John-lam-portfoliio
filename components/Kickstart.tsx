@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
-import { useCMS } from '../context/CMSContext';
-import { useSound } from '../context/SoundContext';
+import { useCMS } from '../context/CMSContext.tsx';
+import { useSound } from '../context/SoundContext.tsx';
 
 const MatrixEffect = ({ primaryColor }: { primaryColor: string }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);

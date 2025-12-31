@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useCMS } from '../context/CMSContext';
+import { useCMS } from '../context/CMSContext.tsx';
 
 const ContactPage: React.FC = () => {
   const { data } = useCMS();

@@ -1,18 +1,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
-import { CMSProvider } from './context/CMSContext';
-import { AuthProvider } from './context/AuthContext';
-import { SoundProvider } from './context/SoundContext';
-import HomePage from './pages/HomePage';
-import CaseStudiesPage from './pages/CaseStudiesPage';
-import CaseStudyDetailPage from './pages/CaseStudyDetailPage';
-import ContactPage from './pages/ContactPage';
-import AdminLoginPage from './pages/AdminLoginPage';
-import AdminDashboard from './pages/AdminDashboard';
-import ProtectedRoute from './components/ProtectedRoute';
-import SiteLayout from './components/SiteLayout';
-import Preloader from './components/Preloader';
+import { CMSProvider } from './context/CMSContext.tsx';
+import { AuthProvider } from './context/AuthContext.tsx';
+import { SoundProvider } from './context/SoundContext.tsx';
+import HomePage from './pages/HomePage.tsx';
+import CaseStudiesPage from './pages/CaseStudiesPage.tsx';
+import CaseStudyDetailPage from './pages/CaseStudyDetailPage.tsx';
+import ContactPage from './pages/ContactPage.tsx';
+import AdminLoginPage from './pages/AdminLoginPage.tsx';
+import AdminDashboard from './pages/AdminDashboard.tsx';
+import ProtectedRoute from './components/ProtectedRoute.tsx';
+import SiteLayout from './components/SiteLayout.tsx';
+import Preloader from './components/Preloader.tsx';
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);

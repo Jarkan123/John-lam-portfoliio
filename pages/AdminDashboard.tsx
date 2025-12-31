@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext.tsx';
 import { useNavigate } from 'react-router-dom';
-import { useCMS } from '../context/CMSContext';
-import { BrandLogo, Service, TextTestimonial, VideoTestimonial, CaseStudy } from '../types';
+import { useCMS } from '../context/CMSContext.tsx';
+import { BrandLogo, Service, TextTestimonial, VideoTestimonial, CaseStudy } from '../types.ts';
 
 type AdminSection = 'settings' | 'logos' | 'services' | 'textTestimonials' | 'videoTestimonials' | 'caseStudies';
 

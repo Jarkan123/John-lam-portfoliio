@@ -1,7 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useCMS } from '../context/CMSContext';
+import { useCMS } from '../context/CMSContext.tsx';
 
 const CaseStudyDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();

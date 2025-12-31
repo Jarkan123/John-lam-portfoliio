@@ -1,7 +1,7 @@
 
 import React, { createContext, useState, useEffect, ReactNode, useContext } from 'react';
-import { CMSData } from '../types';
-import { INITIAL_CMS_DATA } from '../constants';
+import { CMSData } from '../types.ts';
+import { INITIAL_CMS_DATA } from '../constants.ts';
 
 interface CMSContextType {
   data: CMSData;

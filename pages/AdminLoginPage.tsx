@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { ADMIN_CREDENTIALS } from '../constants';
+import { useAuth } from '../context/AuthContext.tsx';
+import { ADMIN_CREDENTIALS } from '../constants.ts';
 
 const AdminLoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
