@@ -5,8 +5,6 @@ import { useCMS } from '../context/CMSContext';
 const TestimonialSlider: React.FC = () => {
   const { data } = useCMS();
   const { primaryColor } = data.settings;
-  // FIX: `data.testimonials` does not exist and `Testimonial` type is not defined.
-  // Using separate arrays for text and video testimonials as per the CMS data structure.
   const textTestimonials = data.textTestimonials.filter(t => t.visible);
   const videoTestimonials = data.videoTestimonials.filter(t => t.visible);
 
@@ -43,7 +41,7 @@ const TestimonialSlider: React.FC = () => {
       {textTestimonials.length > 0 && (
         <div>
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-2xl font-mono" style={{ color: primaryColor }}>/Text_Testimonials</h3>
+            <h3 className="text-2xl font-mono" style={{ color: primaryColor }}>// What_My_Clients_Say</h3>
             {textTestimonials.length > itemsPerTextView && (
               <div className="flex space-x-3">
                 <ControlButton onClick={prevText} direction="left" />
@@ -69,7 +67,7 @@ const TestimonialSlider: React.FC = () => {
       {videoTestimonials.length > 0 && (
         <div>
            <div className="flex justify-between items-center mb-6">
-            <h3 className="text-2xl font-mono" style={{ color: primaryColor }}>/Video_Testimonials</h3>
+            <h3 className="text-2xl font-mono" style={{ color: primaryColor }}>// Video_Testimonials</h3>
             {videoTestimonials.length > 1 && (
                 <div className="flex space-x-3">
                     <ControlButton onClick={prevVideo} direction="left" />
@@ -86,7 +84,7 @@ const TestimonialSlider: React.FC = () => {
                         frameBorder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                         allowFullScreen
-                        className="w-full h-full"
+                        className="w-full h-full min-h-[400px]"
                     ></iframe>
                 </div>
             </div>
