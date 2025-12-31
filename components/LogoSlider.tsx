@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrandLogo } from '../types';
 import { useCMS } from '../context/CMSContext';
@@ -15,9 +16,15 @@ const LogoSlider: React.FC = () => {
     const extendedLogos = [...visibleLogos, ...visibleLogos];
     const animationDuration = `${data.settings.sliderSpeed}s`;
 
-    // FIX: Explicitly type Logo as a React.FC to ensure TS recognizes special props like 'key'.
     const Logo: React.FC<{ logo: BrandLogo }> = ({ logo }) => {
         const hasLink = logo.websiteUrl && logo.websiteUrl !== '#';
+        
+        // Define dynamic hover style
+        const hoverStyle = hasLink ? {
+            filter: 'grayscale(0)',
+            dropShadow: `0 0 8px ${primaryColor}`
+        } : {};
+
         const logoImage = (
              <img 
                 src={logo.logoUrl} 
@@ -33,7 +40,7 @@ const LogoSlider: React.FC = () => {
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className="flex-shrink-0 flex items-center justify-center h-24 group" 
-                    style={{ width: `${100 / extendedLogos.length}%`, '--glow-color': primaryColor } as React.CSSProperties}
+                    style={{ width: `${100 / (extendedLogos.length / 2)}%` } as React.CSSProperties}
                 >
                     {logoImage}
                 </a>
@@ -41,7 +48,7 @@ const LogoSlider: React.FC = () => {
         }
 
         return (
-            <div className="flex-shrink-0 flex items-center justify-center h-24" style={{ width: `${100 / extendedLogos.length}%`}}>
+            <div className="flex-shrink-0 flex items-center justify-center h-24" style={{ width: `${100 / (extendedLogos.length / 2)}%`}}>
                 {logoImage}
             </div>
         );
@@ -52,9 +59,9 @@ const LogoSlider: React.FC = () => {
              <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-black to-transparent z-10"></div>
              <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-black to-transparent z-10"></div>
             <div 
-                className="flex"
+                className="flex items-center"
                 style={{ 
-                    width: `${extendedLogos.length * 33.33}%`,
+                    width: `${extendedLogos.length * 20}%`,
                     animation: `slide ${animationDuration} linear infinite`,
                 }}
             >
@@ -62,15 +69,6 @@ const LogoSlider: React.FC = () => {
                     <Logo key={`${logo.id}-${index}`} logo={logo} />
                 ))}
             </div>
-            <style jsx global>{`
-                @keyframes slide {
-                    from { transform: translateX(0%); }
-                    to { transform: translateX(-50%); }
-                }
-                a.group:hover img {
-                    filter: grayscale(0) drop-shadow(0 0 8px var(--glow-color));
-                }
-            `}</style>
         </div>
     );
 };

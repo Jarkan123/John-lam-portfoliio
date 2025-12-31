@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCMS } from '../context/CMSContext';
+import { useSound } from '../context/SoundContext';
 import TypingEffect from '../components/TypingEffect';
 import LogoSlider from '../components/LogoSlider';
 import TestimonialSlider from '../components/TestimonialSlider';
@@ -10,6 +11,7 @@ import MatrixBackground from '../components/MatrixBackground';
 
 const HomePage: React.FC = () => {
   const { data } = useCMS();
+  const { playSound } = useSound();
   const publishedCaseStudies = data.caseStudies.filter(cs => cs.status === 'published');
   const primaryColor = data.settings.primaryColor;
 
@@ -63,7 +65,11 @@ const HomePage: React.FC = () => {
         </div>
         <div className="grid md:grid-cols-3 gap-8">
           {data.services.map(service => (
-            <div key={service.id} className="card-border p-8 hover:-translate-y-2 transition-transform duration-300">
+            <div 
+              key={service.id} 
+              className="card-border p-8 hover:-translate-y-2 transition-transform duration-300 cursor-default"
+              onMouseEnter={() => playSound('hover')}
+            >
               <h3 className="text-2xl font-semibold mb-3 font-mono" style={{ color: primaryColor }}>{service.title}</h3>
               <p className="text-gray-300">{service.description}</p>
             </div>
@@ -90,7 +96,13 @@ const HomePage: React.FC = () => {
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
           {publishedCaseStudies.slice(0, 2).map(cs => (
-            <Link to={`/case-studies/${cs.slug}`} key={cs.id} className="group block card-border rounded-lg overflow-hidden transition-all duration-300 hover:-translate-y-2">
+            <Link 
+              to={`/case-studies/${cs.slug}`} 
+              key={cs.id} 
+              className="group block card-border rounded-lg overflow-hidden transition-all duration-300 hover:-translate-y-2"
+              onMouseEnter={() => playSound('hover')}
+              onClick={() => playSound('click')}
+            >
               <img src={cs.coverImage} alt={cs.title} className="w-full h-56 object-cover group-hover:opacity-80 transition-opacity" />
               <div className="p-6">
                 <h3 className="text-2xl font-semibold mb-2 font-mono" style={{ color: primaryColor }}>{cs.title}</h3>
@@ -101,7 +113,13 @@ const HomePage: React.FC = () => {
           ))}
         </div>
         <div className="text-center mt-12">
-            <Link to="/case-studies" className="inline-block text-black font-semibold py-3 px-6 rounded-lg transition-all" style={{backgroundColor: primaryColor, boxShadow: `0 0 20px 0 ${primaryColor}55`}}>
+            <Link 
+              to="/case-studies" 
+              className="inline-block text-black font-semibold py-3 px-6 rounded-lg transition-all" 
+              style={{backgroundColor: primaryColor, boxShadow: `0 0 20px 0 ${primaryColor}55`}}
+              onMouseEnter={() => playSound('hover')}
+              onClick={() => playSound('click')}
+            >
                 View All Case Studies
             </Link>
         </div>
@@ -117,13 +135,6 @@ const HomePage: React.FC = () => {
           <ContactForm />
         </div>
       </section>
-      
-      <style jsx global>{`
-        .bg-grid-gray-700\\[\\[0\\.1\\]\\] {
-          background-image: linear-gradient(to right, rgba(128, 128, 128, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(128, 128, 128, 0.1) 1px, transparent 1px);
-          background-size: 40px 40px;
-        }
-      `}</style>
     </div>
   );
 };
@@ -131,12 +142,14 @@ const HomePage: React.FC = () => {
 
 const ContactForm: React.FC = () => {
     const { data } = useCMS();
+    const { playSound } = useSound();
     const [submitted, setSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsSubmitting(true);
+        playSound('click');
         const formData = new FormData(e.currentTarget);
 
         try {
@@ -174,18 +187,45 @@ const ContactForm: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-6 card-border p-8">
             <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-300 font-mono">Name</label>
-                <input type="text" id="name" name="name" required className="mt-1 block w-full bg-black border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 border" style={{'--tw-ring-color': data.settings.primaryColor, borderColor: 'rgba(255,255,255,0.2)'} as React.CSSProperties}/>
+                <input 
+                  type="text" 
+                  id="name" 
+                  name="name" 
+                  required 
+                  className="mt-1 block w-full bg-black border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 border" 
+                  style={{'--tw-ring-color': data.settings.primaryColor, borderColor: 'rgba(255,255,255,0.2)'} as React.CSSProperties}
+                />
             </div>
             <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-300 font-mono">Email</label>
-                <input type="email" id="email" name="_replyto" required className="mt-1 block w-full bg-black border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 border" style={{'--tw-ring-color': data.settings.primaryColor, borderColor: 'rgba(255,255,255,0.2)'} as React.CSSProperties}/>
+                <input 
+                  type="email" 
+                  id="email" 
+                  name="_replyto" 
+                  required 
+                  className="mt-1 block w-full bg-black border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 border" 
+                  style={{'--tw-ring-color': data.settings.primaryColor, borderColor: 'rgba(255,255,255,0.2)'} as React.CSSProperties}
+                />
             </div>
             <div>
                 <label htmlFor="message" className="block text-sm font-medium text-gray-300 font-mono">Message</label>
-                <textarea id="message" name="message" rows={4} required className="mt-1 block w-full bg-black border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 border" style={{'--tw-ring-color': data.settings.primaryColor, borderColor: 'rgba(255,255,255,0.2)'} as React.CSSProperties}></textarea>
+                <textarea 
+                  id="message" 
+                  name="message" 
+                  rows={4} 
+                  required 
+                  className="mt-1 block w-full bg-black border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 border" 
+                  style={{'--tw-ring-color': data.settings.primaryColor, borderColor: 'rgba(255,255,255,0.2)'} as React.CSSProperties}
+                ></textarea>
             </div>
             <div>
-                <button type="submit" disabled={isSubmitting} className="w-full font-semibold py-3 px-6 rounded-lg transition-all text-black disabled:opacity-50" style={{backgroundColor: data.settings.primaryColor, boxShadow: `0 0 20px 0 ${data.settings.primaryColor}55`}}>
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting} 
+                  onMouseEnter={() => playSound('hover')}
+                  className="w-full font-semibold py-3 px-6 rounded-lg transition-all text-black disabled:opacity-50" 
+                  style={{backgroundColor: data.settings.primaryColor, boxShadow: `0 0 20px 0 ${data.settings.primaryColor}55`}}
+                >
                     {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
             </div>

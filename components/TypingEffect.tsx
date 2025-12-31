@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useSound } from '../context/SoundContext';
 
 interface TypingEffectProps {
   phrases: string[];
@@ -14,6 +15,7 @@ const TypingEffect: React.FC<TypingEffectProps> = ({
   deletingSpeed = 50,
   delay = 2000,
 }) => {
+  const { playSound } = useSound();
   const [text, setText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [phraseIndex, setPhraseIndex] = useState(0);
@@ -41,20 +43,12 @@ const TypingEffect: React.FC<TypingEffectProps> = ({
     const timer = setTimeout(handleTyping, typingTimeout);
 
     return () => clearTimeout(timer);
-  }, [text, isDeleting, phraseIndex, phrases, typingSpeed, deletingSpeed, delay, typingTimeout]);
+  }, [text, isDeleting, phraseIndex, phrases, typingSpeed, deletingSpeed, delay, typingTimeout, playSound]);
 
   return (
     <span className="relative">
       {text}
       <span className="animate-blink absolute right-[-2px] top-0 h-full w-[2px] bg-current"></span>
-      <style jsx global>{`
-        @keyframes blink {
-          50% { opacity: 0; }
-        }
-        .animate-blink {
-          animation: blink 1s step-end infinite;
-        }
-      `}</style>
     </span>
   );
 };

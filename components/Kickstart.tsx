@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { useCMS } from '../context/CMSContext';
+import { useSound } from '../context/SoundContext';
 
 const MatrixEffect = ({ primaryColor }: { primaryColor: string }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -57,22 +58,29 @@ const MatrixEffect = ({ primaryColor }: { primaryColor: string }) => {
 
 const Kickstart: React.FC = () => {
     const { data } = useCMS();
+    const { isMuted, toggleMute, playSound } = useSound();
     const [isVisible, setIsVisible] = useState(false);
     const [isEffectActive, setIsEffectActive] = useState(false);
     
     const triggerKickstart = () => {
+        // Unlock audio on first interaction if muted
+        if (isMuted) {
+            toggleMute();
+        }
+
         const contactSection = document.getElementById('contact');
         if (contactSection) {
+            playSound('transition');
             setIsEffectActive(true);
             contactSection.scrollIntoView({ behavior: 'smooth' });
             setTimeout(() => {
                 setIsEffectActive(false);
-            }, 1200); // Duration of the scroll + effect
+            }, 1200);
         }
     };
 
     useEffect(() => {
-        const timer = setTimeout(() => setIsVisible(true), 4000); // Appear after preloader
+        const timer = setTimeout(() => setIsVisible(true), 4000); 
         
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.code === 'Space' && !e.repeat) {
@@ -86,7 +94,7 @@ const Kickstart: React.FC = () => {
             clearTimeout(timer);
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, []);
+    }, [isMuted]);
 
     const SpaceIcon = () => (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-8 inline-block mx-1 border border-current rounded" viewBox="0 0 32 20">
@@ -98,9 +106,10 @@ const Kickstart: React.FC = () => {
         <>
             <div className={`fixed bottom-4 right-4 z-50 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                 <div 
-                    className="p-3 rounded font-mono text-sm border cursor-pointer" 
+                    className="p-3 rounded font-mono text-sm border cursor-pointer group" 
                     style={{color: data.settings.primaryColor, borderColor: data.settings.primaryColor, backgroundColor: 'rgba(0,0,0,0.8)'}}
                     onClick={triggerKickstart}
+                    onMouseEnter={() => playSound('hover')}
                 >
                     <span className="hidden md:inline">Press <SpaceIcon/> to kickstart</span>
                     <span className="md:hidden">Click here to kickstart</span>

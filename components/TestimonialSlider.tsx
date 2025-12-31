@@ -1,9 +1,11 @@
 
 import React, { useState } from 'react';
 import { useCMS } from '../context/CMSContext';
+import { useSound } from '../context/SoundContext';
 
 const TestimonialSlider: React.FC = () => {
   const { data } = useCMS();
+  const { playSound } = useSound();
   const { primaryColor } = data.settings;
   const textTestimonials = data.textTestimonials.filter(t => t.visible);
   const videoTestimonials = data.videoTestimonials.filter(t => t.visible);
@@ -14,20 +16,29 @@ const TestimonialSlider: React.FC = () => {
   const itemsPerTextView = 2;
 
   const nextText = () => {
+    playSound('click');
     setCurrentTextIndex(prev => (prev + itemsPerTextView) % textTestimonials.length);
   };
   const prevText = () => {
+    playSound('click');
     setCurrentTextIndex(prev => (prev - itemsPerTextView + textTestimonials.length) % textTestimonials.length);
   };
   const nextVideo = () => {
+    playSound('click');
     setCurrentVideoIndex(prev => (prev + 1) % videoTestimonials.length);
   };
   const prevVideo = () => {
+    playSound('click');
     setCurrentVideoIndex(prev => (prev - 1 + videoTestimonials.length) % videoTestimonials.length);
   };
   
   const ControlButton = ({ onClick, direction }: { onClick: () => void, direction: 'left' | 'right' }) => (
-    <button onClick={onClick} className="p-2 border border-current rounded-full hover:bg-current hover:text-black transition-colors" style={{ color: primaryColor }}>
+    <button 
+      onClick={onClick} 
+      onMouseEnter={() => playSound('hover')}
+      className="p-2 border border-current rounded-full hover:bg-current hover:text-black transition-colors" 
+      style={{ color: primaryColor }}
+    >
       {direction === 'left' ? 
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg> :
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
@@ -51,7 +62,11 @@ const TestimonialSlider: React.FC = () => {
           </div>
           <div className="grid md:grid-cols-2 gap-8">
             {textTestimonials.slice(currentTextIndex, currentTextIndex + itemsPerTextView).map(t => (
-              <div key={t.id} className="card-border p-6 flex flex-col h-full">
+              <div 
+                key={t.id} 
+                className="card-border p-6 flex flex-col h-full"
+                onMouseEnter={() => playSound('hover')}
+              >
                 <blockquote className="text-gray-300 italic flex-grow">"{t.text}"</blockquote>
                 <footer className="mt-6 font-mono">
                   <p className="font-bold text-white">{t.author}</p>

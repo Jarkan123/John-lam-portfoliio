@@ -18,6 +18,8 @@
             font-family: 'Inter', sans-serif;
             background-color: #000;
             color: #EAEAEA;
+            margin: 0;
+            padding: 0;
         }
         .font-mono {
             font-family: 'Roboto Mono', monospace;
@@ -81,6 +83,25 @@
             from { top: -10%; }
             to { top: 100%; }
         }
+        
+        /* Global Animations previously in JSX */
+        @keyframes blink {
+          50% { opacity: 0; }
+        }
+        .animate-blink {
+          animation: blink 1s step-end infinite;
+        }
+        
+        @keyframes slide {
+            from { transform: translateX(0%); }
+            to { transform: translateX(-50%); }
+        }
+        
+        .bg-grid-gray-700 {
+          background-image: linear-gradient(to right, rgba(128, 128, 128, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(128, 128, 128, 0.1) 1px, transparent 1px);
+          background-size: 40px 40px;
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #111; }
@@ -100,6 +121,6 @@
 </head>
 <body class="bg-black text-white">
 <div id="root"></div>
-<script type="module" src="/index.tsx"></script>
+<script type="module" src="./index.tsx"></script>
 </body>
 </html>
