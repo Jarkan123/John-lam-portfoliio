@@ -96,23 +96,16 @@ const Kickstart: React.FC = () => {
         };
     }, [isMuted]);
 
-    const SpaceIcon = () => (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-8 inline-block mx-1 border border-current rounded" viewBox="0 0 32 20">
-            <rect x="4" y="14" width="24" height="2" fill="currentColor"/>
-        </svg>
-    );
-
     return (
         <>
             <div className={`fixed bottom-4 right-4 z-50 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                 <div 
-                    className="p-3 rounded font-mono text-sm border cursor-pointer group" 
-                    style={{color: data.settings.primaryColor, borderColor: data.settings.primaryColor, backgroundColor: 'rgba(0,0,0,0.8)'}}
+                    className="p-3 px-5 rounded font-mono text-sm border cursor-pointer group shadow-2xl active:scale-95 transition-transform" 
+                    style={{color: data.settings.primaryColor, borderColor: data.settings.primaryColor, backgroundColor: 'rgba(0,0,0,0.9)', boxShadow: `0 0 15px ${data.settings.primaryColor}33`}}
                     onClick={triggerKickstart}
                     onMouseEnter={() => playSound('hover')}
                 >
-                    <span className="hidden md:inline">Press <SpaceIcon/> to kickstart</span>
-                    <span className="md:hidden">Click here to kickstart</span>
+                    <span className="uppercase tracking-widest font-bold">Click here to kickstart</span>
                 </div>
             </div>
             <div className={`kickstart-overlay ${isEffectActive ? 'active' : ''}`} style={{pointerEvents: isEffectActive ? 'auto' : 'none'}}>

@@ -23,31 +23,29 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <>
-      <Preloader loading={loading} />
-      <div className={`transition-opacity duration-500 ${loading ? 'opacity-0' : 'opacity-100'}`}>
-        <CMSProvider>
-          <AuthProvider>
-            <SoundProvider>
-              <HashRouter>
-                <Routes>
-                  <Route path="/admin" element={<AdminLoginPage />} />
-                  <Route 
-                    path="/admin/dashboard" 
-                    element={
-                      <ProtectedRoute>
-                        <AdminDashboard />
-                      </ProtectedRoute>
-                    } 
-                  />
-                  <Route path="/*" element={<MainApp />} />
-                </Routes>
-              </HashRouter>
-            </SoundProvider>
-          </AuthProvider>
-        </CMSProvider>
-      </div>
-    </>
+    <CMSProvider>
+      <AuthProvider>
+        <SoundProvider>
+          <Preloader loading={loading} />
+          <div className={`transition-opacity duration-500 ${loading ? 'opacity-0' : 'opacity-100'}`}>
+            <HashRouter>
+              <Routes>
+                <Route path="/admin" element={<AdminLoginPage />} />
+                <Route 
+                  path="/admin/dashboard" 
+                  element={
+                    <ProtectedRoute>
+                      <AdminDashboard />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route path="/*" element={<MainApp />} />
+              </Routes>
+            </HashRouter>
+          </div>
+        </SoundProvider>
+      </AuthProvider>
+    </CMSProvider>
   );
 };
 

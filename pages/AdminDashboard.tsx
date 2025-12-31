@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext.tsx';
 import { useNavigate } from 'react-router-dom';
 import { useCMS } from '../context/CMSContext.tsx';
-import { BrandLogo, Service, TextTestimonial, VideoTestimonial, CaseStudy } from '../types.ts';
+import { BrandLogo, Service, TextTestimonial, CaseStudy } from '../types.ts';
 
-type AdminSection = 'settings' | 'logos' | 'services' | 'textTestimonials' | 'videoTestimonials' | 'caseStudies';
+type AdminSection = 'settings' | 'logos' | 'services' | 'textTestimonials' | 'caseStudies' | 'maintenance';
 
 // --- Specialized Case Study Editor ---
 const CaseStudyEditor: React.FC = () => {
@@ -109,7 +109,6 @@ const CaseStudyEditor: React.FC = () => {
                 <div className="w-2/3 px-4">
                     {activeStudy ? (
                         <div className="space-y-4 bg-gray-800 rounded-md p-4">
-                             {/* --- Main Fields --- */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium mb-1">Title</label>
@@ -143,7 +142,6 @@ const CaseStudyEditor: React.FC = () => {
                                 </div>
                             ))}
 
-                            {/* --- Gallery Editor --- */}
                             <div className="pt-4 border-t border-gray-700">
                                 <h4 className="text-lg font-semibold mb-2">Project Gallery</h4>
                                 <div className="space-y-3">
@@ -179,14 +177,12 @@ const CaseStudyEditor: React.FC = () => {
     );
 };
 
-// --- Generic Editor for other sections ---
-const GenericEditor = ({ section, title, fields }: { section: 'logos' | 'services' | 'textTestimonials' | 'videoTestimonials', title: string, fields: string[] }) => {
+const GenericEditor = ({ section, title, fields }: { section: 'logos' | 'services' | 'textTestimonials', title: string, fields: string[] }) => {
     const { data, setData } = useCMS();
-    const [items, setItems] = useState<any[]>(data[section]);
+    const [items, setItems] = useState<any[]>(data[section] || []);
     const [hasChanges, setHasChanges] = useState(false);
 
     useEffect(() => {
-        // A simple deep-ish comparison to see if changes have been made.
         if (JSON.stringify(items) !== JSON.stringify(data[section])) {
             setHasChanges(true);
         } else {
@@ -213,7 +209,7 @@ const GenericEditor = ({ section, title, fields }: { section: 'logos' | 'service
     };
 
     const handleDeleteItem = (id: string) => {
-        if (window.confirm('Are you sure you want to delete this item? You must click "Save & Publish Changes" to make this permanent.')) {
+        if (window.confirm('Are you sure you want to delete this item?')) {
             setItems(items.filter(item => item.id !== id));
         }
     };
@@ -278,24 +274,27 @@ const SettingsEditor = () => {
             <h2 className="text-3xl font-bold mb-6">Site Settings</h2>
             <div className="space-y-4 max-w-lg">
                 <div>
-                    <label className="block mb-1">Primary Color</label>
+                    <label className="block mb-1 font-medium">Primary Color</label>
                     <input type="color" name="primaryColor" value={settings.primaryColor} onChange={handleChange} className="w-full h-10 p-1 bg-gray-700 border border-gray-600 rounded-md" />
                 </div>
                 <div>
-                    <label className="block mb-1">Logo Slider Speed (seconds)</label>
+                    <label className="block mb-1 font-medium">Logo Slider Speed (seconds)</label>
                     <input type="number" name="sliderSpeed" value={settings.sliderSpeed} onChange={handleChange} className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md" />
                 </div>
                 <div>
-                    <label className="block mb-1">SEO Meta Title</label>
+                    <label className="block mb-1 font-medium">SEO Meta Title</label>
                     <input type="text" name="metaTitle" value={settings.metaTitle} onChange={handleChange} className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md" />
                 </div>
                 <div>
-                    <label className="block mb-1">SEO Meta Description</label>
+                    <label className="block mb-1 font-medium">SEO Meta Description</label>
                     <textarea name="metaDescription" value={settings.metaDescription} onChange={handleChange} rows={3} className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md" />
                 </div>
                 <div>
-                    <label className="block mb-1">About Me Section</label>
-                    <textarea name="aboutMe" value={settings.aboutMe} onChange={handleChange} rows={8} className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md" />
+                    <div className="flex justify-between items-end mb-1">
+                        <label className="block font-medium">About Me Section</label>
+                        <span className="text-[10px] uppercase text-blue-400 font-bold">Tip: use [BOLD]text[/BOLD] to emphasize</span>
+                    </div>
+                    <textarea name="aboutMe" value={settings.aboutMe} onChange={handleChange} rows={12} className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md font-mono text-sm" />
                 </div>
                 <button onClick={handleSave} className="px-4 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700">Save Settings</button>
             </div>
@@ -303,7 +302,43 @@ const SettingsEditor = () => {
     )
 }
 
-// --- Main Dashboard Component ---
+const MaintenanceTools = () => {
+    const { data } = useCMS();
+    const [copied, setCopied] = useState(false);
+
+    const exportData = JSON.stringify(data, null, 2);
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(exportData);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    return (
+        <div className="max-w-4xl">
+            <h2 className="text-3xl font-bold mb-4">Maintenance & Sync</h2>
+            <p className="text-gray-400 mb-8">
+                Use the tool below to export your current CMS state. You can copy this JSON and provide it to the developer (or paste it into <code>constants.ts</code>) to ensure your live changes become the official default configuration.
+            </p>
+            
+            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-semibold">Export CMS Configuration</h3>
+                    <button 
+                        onClick={handleCopy}
+                        className={`px-4 py-1 rounded text-sm font-semibold transition-all ${copied ? 'bg-green-600' : 'bg-blue-600 hover:bg-blue-700'}`}
+                    >
+                        {copied ? 'Copied!' : 'Copy to Clipboard'}
+                    </button>
+                </div>
+                <pre className="bg-black p-4 rounded border border-gray-900 overflow-x-auto text-xs font-mono text-gray-300 max-h-[500px]">
+                    {exportData}
+                </pre>
+            </div>
+        </div>
+    );
+};
+
 const AdminDashboard: React.FC = () => {
   const { logout } = useAuth();
   const { data } = useCMS();
@@ -340,19 +375,20 @@ const AdminDashboard: React.FC = () => {
         <NavItem section="logos" label="Brand Logos" />
         <NavItem section="services" label="Services" />
         <NavItem section="textTestimonials"label="Text Testimonials" />
-        <NavItem section="videoTestimonials" label="Video Testimonials" />
         <NavItem section="caseStudies" label="Case Studies" />
+        <div className="h-px bg-gray-700 my-4"></div>
+        <NavItem section="maintenance" label="Maintenance (Sync)" />
          <button onClick={handleLogout} className="w-full text-left px-4 py-2 rounded-md hover:bg-red-800/50 text-red-400 mt-auto">
             Logout
         </button>
       </aside>
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="flex-1 p-8 overflow-y-auto text-white">
         {activeSection === 'settings' && <SettingsEditor />}
         {activeSection === 'logos' && <GenericEditor section="logos" title="Brand Logos" fields={['name', 'logoUrl', 'websiteUrl', 'visible']} />}
         {activeSection === 'services' && <GenericEditor section="services" title="Services" fields={['title', 'description']} />}
-        {activeSection === 'textTestimonials' && <GenericEditor section="textTestimonials" title="Text Testimonials" fields={['author', 'company', 'text', 'visible']} />}
-        {activeSection === 'videoTestimonials' && <GenericEditor section="videoTestimonials" title="Video Testimonials" fields={['author', 'company', 'text', 'videoUrl', 'visible']} />}
+        {activeSection === 'textTestimonials' && <GenericEditor section="textTestimonials" title="Text Testimonials" fields={['author', 'company', 'text', 'avatarUrl', 'visible']} />}
         {activeSection === 'caseStudies' && <CaseStudyEditor />}
+        {activeSection === 'maintenance' && <MaintenanceTools />}
       </main>
     </div>
   );

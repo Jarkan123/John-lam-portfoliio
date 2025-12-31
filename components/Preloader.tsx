@@ -1,27 +1,16 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
-
-const getPrimaryColorFromStorage = (): string => {
-    try {
-        const storedData = localStorage.getItem('john-lam-portfolio-cms');
-        if (storedData) {
-            const parsedData = JSON.parse(storedData);
-            if (parsedData?.settings?.primaryColor) {
-                return parsedData.settings.primaryColor;
-            }
-        }
-    } catch (error) {
-        console.error("Could not parse primary color from localStorage for Preloader", error);
-    }
-    return '#39ff14'; // Fallback color
-};
-
+import React, { useState, useEffect } from 'react';
+import { useCMS } from '../context/CMSContext.tsx';
+import { useSound } from '../context/SoundContext.tsx';
 
 const Preloader: React.FC<{loading: boolean}> = ({ loading }) => {
+  const { data } = useCMS();
+  const { playSound } = useSound();
   const [progress, setProgress] = useState(0);
   const [statusText, setStatusText] = useState('LOADING DATA STREAMS');
-  const primaryColor = useMemo(() => getPrimaryColorFromStorage(), []);
+  const primaryColor = data.settings.primaryColor;
 
+  // Handle Progress Bar
   useEffect(() => {
     if (loading) {
       const interval = setInterval(() => {
@@ -32,22 +21,36 @@ const Preloader: React.FC<{loading: boolean}> = ({ loading }) => {
           }
           return prev + 1;
         });
-      }, 45); // Adjusted to fit ~5s total duration
+      }, 45);
       return () => clearInterval(interval);
     }
   }, [loading]);
 
+  // Handle Status Text and Processing Sound
   useEffect(() => {
+    let nextStatus = '';
     if (progress < 33) {
-      setStatusText('LOADING DATA STREAMS');
+      nextStatus = 'LOADING DATA STREAMS';
     } else if (progress < 66) {
-      setStatusText('CONNECTING PERFORMANCE LAYERS');
+      nextStatus = 'CONNECTING PERFORMANCE LAYERS';
     } else if (progress < 100) {
-      setStatusText('CALIBRATING REVENUE ENGINE');
+      nextStatus = 'CALIBRATING REVENUE ENGINE';
     } else {
-      setStatusText('SYSTEM READY');
+      nextStatus = 'SYSTEM READY';
     }
-  }, [progress]);
+
+    if (nextStatus !== statusText) {
+      setStatusText(nextStatus);
+      playSound('processing');
+    }
+  }, [progress, statusText, playSound]);
+
+  // Play startup sound on completion
+  useEffect(() => {
+    if (progress === 100) {
+        playSound('startup');
+    }
+  }, [progress, playSound]);
 
   return (
     <div className={`fixed inset-0 bg-black flex flex-col items-center justify-center z-[100] transition-opacity duration-500 ${loading ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>

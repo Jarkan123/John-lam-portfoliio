@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSound } from '../context/SoundContext.tsx';
 
 interface TypingEffectProps {
@@ -20,6 +20,11 @@ const TypingEffect: React.FC<TypingEffectProps> = ({
   const [isDeleting, setIsDeleting] = useState(false);
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [typingTimeout, setTypingTimeout] = useState(typingSpeed);
+
+  // Find the longest phrase to reserve space
+  const longestPhrase = useMemo(() => {
+    return phrases.reduce((a, b) => a.length > b.length ? a : b, "");
+  }, [phrases]);
 
   useEffect(() => {
     const handleTyping = () => {
@@ -46,9 +51,17 @@ const TypingEffect: React.FC<TypingEffectProps> = ({
   }, [text, isDeleting, phraseIndex, phrases, typingSpeed, deletingSpeed, delay, typingTimeout, playSound]);
 
   return (
-    <span className="relative">
-      {text}
-      <span className="animate-blink absolute right-[-2px] top-0 h-full w-[2px] bg-current"></span>
+    <span className="relative inline-flex items-center justify-center">
+      {/* Ghost text reserves the width and height of the longest possible string */}
+      <span className="invisible pointer-events-none select-none" aria-hidden="true">
+        {longestPhrase}
+      </span>
+      
+      {/* Actual animated text */}
+      <span className="absolute inset-0 flex items-center justify-center whitespace-nowrap">
+        {text}
+        <span className="animate-blink inline-block ml-1 h-[0.9em] w-[2px] bg-current align-middle"></span>
+      </span>
     </span>
   );
 };

@@ -15,6 +15,15 @@ const HomePage: React.FC = () => {
   const publishedCaseStudies = data.caseStudies.filter(cs => cs.status === 'published');
   const primaryColor = data.settings.primaryColor;
 
+  const formatTextWithBolds = (text: string) => {
+    // Replace [BOLD] with <strong> and preserve newlines as <br/>
+    const formatted = text
+      .replace(/\[BOLD\]/g, `<strong style="color: ${primaryColor}; text-shadow: 0 0 10px ${primaryColor}44;">`)
+      .replace(/\[\/BOLD\]/g, '</strong>')
+      .replace(/\n/g, '<br/>');
+    return { __html: formatted };
+  };
+
   return (
     <div className="bg-black text-white">
       <Kickstart />
@@ -24,30 +33,43 @@ const HomePage: React.FC = () => {
         <MatrixBackground />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black"></div>
         <div className="container mx-auto px-4 z-10">
-          <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-4 font-mono">John Lam</h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">I Build Digital Systems That Turn Attention Into Revenue.</p>
-          <div className="text-lg md:text-xl h-8 font-mono" style={{ color: primaryColor }}>
-            <TypingEffect
+          <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-2 font-mono drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+            John Lam
+          </h1>
+          <div className="text-2xl md:text-4xl font-bold tracking-tight mb-8 font-mono opacity-90 min-h-[1.5em] flex items-center justify-center" style={{ color: primaryColor }}>
+             <TypingEffect
               phrases={[
-                'Performance-driven growth strategy',
-                'Digital marketing expert',
-                'AI & Automation',
+                'Digital Growth Marketing',
+                'Performance Architecture',
+                'Revenue Scaling',
               ]}
-              typingSpeed={120}
-              deletingSpeed={60}
-              delay={2500}
+              typingSpeed={100}
+              deletingSpeed={50}
+              delay={3000}
             />
           </div>
+          <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed">
+            I build digital systems that turn fragmented attention into predictable revenue.
+          </p>
         </div>
       </section>
 
       {/* About Me Section */}
-      <section className="py-20 container mx-auto px-4 max-w-4xl">
-         <div className="text-center mb-12">
+      <section className="py-24 container mx-auto px-4 max-w-4xl relative">
+         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold tracking-tight font-mono text-glow" style={{ color: primaryColor }}>// About_Me</h2>
+          <div className="w-24 h-1 mt-4 mx-auto" style={{ backgroundColor: primaryColor }}></div>
         </div>
-        <div className="card-border p-8">
-            <p className="text-gray-300 text-lg leading-relaxed">{data.settings.aboutMe}</p>
+        <div className="card-border p-8 md:p-16 relative overflow-hidden">
+            {/* Subtle background decoration */}
+            <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none font-mono text-xs overflow-hidden select-none">
+                {Array(20).fill('DATA_STRAT_GROWTH_SYSTEM_REVENUE_').join(' ')}
+            </div>
+            
+            <p 
+              className="text-gray-300 text-lg md:text-2xl leading-relaxed font-light relative z-10"
+              dangerouslySetInnerHTML={formatTextWithBolds(data.settings.aboutMe)}
+            />
         </div>
       </section>
 
@@ -60,18 +82,20 @@ const HomePage: React.FC = () => {
       {/* Services Section */}
       <section className="py-20 container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold tracking-tight font-mono text-glow" style={{ color: primaryColor }}>// Services</h2>
-          <p className="text-gray-400 mt-2">Driving growth through tailored strategies.</p>
+          <h2 className="text-4xl font-bold tracking-tight font-mono text-glow" style={{ color: primaryColor }}>// Growth_Solutions</h2>
+          <p className="text-gray-400 mt-2">Driving growth through tailored systems and precise execution.</p>
         </div>
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
           {data.services.map(service => (
             <div 
               key={service.id} 
-              className="card-border p-8 hover:-translate-y-2 transition-transform duration-300 cursor-default"
+              className="card-border p-8 hover:-translate-y-2 transition-all duration-300 cursor-default flex flex-col group"
               onMouseEnter={() => playSound('hover')}
             >
-              <h3 className="text-2xl font-semibold mb-3 font-mono" style={{ color: primaryColor }}>{service.title}</h3>
-              <p className="text-gray-300">{service.description}</p>
+              <h3 className="text-2xl font-bold mb-4 font-mono group-hover:text-glow transition-all" style={{ color: primaryColor }}>{service.title}</h3>
+              <p className="text-gray-300 text-sm md:text-base leading-relaxed whitespace-pre-line flex-grow">
+                {service.description}
+              </p>
             </div>
           ))}
         </div>

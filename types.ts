@@ -18,6 +18,7 @@ export interface TextTestimonial {
   author: string;
   company: string;
   text: string;
+  avatarUrl?: string;
   visible: boolean;
 }
 
